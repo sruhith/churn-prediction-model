@@ -9,18 +9,15 @@ from sklearn.metrics import accuracy_score, classification_report, confusion_mat
 from imblearn.over_sampling import SMOTE
 
 
-# -----------------------------
 # 1. Load Data
-# -----------------------------
+
 def load_data():
     df = pd.read_csv("/data/Telco-Customer-Churn.csv")
     df = df.drop(columns=["customerID"])
     return df
 
-
-# -----------------------------
 # 2. Preprocess Data
-# -----------------------------
+
 def preprocess_data(df):
     # Fix TotalCharges column
     df["TotalCharges"] = df["TotalCharges"].replace({" ": "0"})
@@ -41,9 +38,8 @@ def preprocess_data(df):
     return df, encoders
 
 
-# -----------------------------
 # 3. Split Data
-# -----------------------------
+
 def split_data(df):
     X = df.drop(columns=["Churn"])
     y = df["Churn"]
@@ -55,27 +51,24 @@ def split_data(df):
     return X_train, X_test, y_train, y_test
 
 
-# -----------------------------
+
 # 4. Apply SMOTE
-# -----------------------------
+
 def apply_smote(X_train, y_train):
     smote = SMOTE(random_state=42)
     X_resampled, y_resampled = smote.fit_resample(X_train, y_train)
     return X_resampled, y_resampled
 
 
-# -----------------------------
 # 5. Train Model
-# -----------------------------
+
 def train_model(X_train, y_train):
     model = RandomForestClassifier(random_state=42)
     model.fit(X_train, y_train)
     return model
 
 
-# -----------------------------
 # 6. Evaluate Model
-# -----------------------------
 def evaluate_model(model, X_test, y_test):
     y_pred = model.predict(X_test)
 
@@ -86,9 +79,8 @@ def evaluate_model(model, X_test, y_test):
     print("\nClassification Report:\n", classification_report(y_test, y_pred))
 
 
-# -----------------------------
 # 7. Save Model
-# -----------------------------
+
 def save_model(model, encoders, feature_names):
     model_data = {
         "model": model,
@@ -102,9 +94,8 @@ def save_model(model, encoders, feature_names):
     print("\nModel saved successfully inside models/ folder.")
 
 
-# -----------------------------
 # Main Execution
-# -----------------------------
+
 def main():
     print("Loading data...")
     df = load_data()
